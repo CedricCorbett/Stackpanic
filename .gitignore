@@ -1,0 +1,22 @@
+# Cloudflare / wrangler local state
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# Node
+node_modules/
+
+# Never commit anything that could hold a live credential.
+# Access tokens live encrypted in D1 and are set through the dashboard.
+# They must never appear in a file in this repo.
+*.local.sql
+secrets.txt
+*.token
+.env
+.env.*
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

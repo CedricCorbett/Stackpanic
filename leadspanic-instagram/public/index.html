@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E0F12">
+<title>Leadspanic Social</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark"></span>
+    <span class="brand-name">Leadspanic Social</span>
+  </div>
+  <div class="topbar-right">
+    <select id="accountSwitcher" class="account-switcher" aria-label="Account"></select>
+    <span id="statusPill" class="status-pill" title="Account state">—</span>
+  </div>
+</header>
+
+<div id="banner" class="banner" hidden></div>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-view="calendar">Calendar</button>
+  <button class="tab" data-view="inbox">Inbox</button>
+  <button class="tab" data-view="codes">Codes</button>
+  <button class="tab" data-view="knowledge">Knowledge</button>
+  <button class="tab" data-view="media">Media</button>
+  <button class="tab" data-view="schedule">Schedule</button>
+  <button class="tab" data-view="analytics">Analytics</button>
+  <button class="tab" data-view="activity">Activity</button>
+  <button class="tab" data-view="settings">Settings</button>
+</nav>
+
+<main>
+
+  <!-- ================= CALENDAR ================= -->
+  <section class="view active" id="view-calendar">
+    <div class="view-head">
+      <div class="month-nav">
+        <button id="prevMonth" class="icon-btn" aria-label="Previous month">‹</button>
+        <h2 id="monthLabel">—</h2>
+        <button id="nextMonth" class="icon-btn" aria-label="Next month">›</button>
+      </div>
+      <div class="view-actions">
+        <button id="runNowBtn" class="btn ghost" title="Publish anything due and send any due follow-ups, without waiting for the 15 minute cron">Run now</button>
+        <button id="newPostBtn" class="btn primary">New post</button>
+      </div>
+    </div>
+
+    <div id="draftBar" class="draft-bar" hidden></div>
+
+    <div class="weekday-row" id="weekdayRow"></div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <div class="legend">
+      <span><i class="dot draft"></i> draft</span>
+      <span><i class="dot scheduled"></i> scheduled</span>
+      <span><i class="dot publishing"></i> publishing</span>
+      <span><i class="dot published"></i> published</span>
+      <span><i class="dot failed"></i> failed</span>
+    </div>
+  </section>
+
+  <!-- ================= INBOX ================= -->
+  <section class="view" id="view-inbox">
+    <div class="view-head">
+      <h2>Inbox</h2>
+      <div class="view-actions">
+        <select id="inboxFilter" class="select">
+          <option value="">All threads</option>
+          <option value="escalated">Escalated only</option>
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
+        </select>
+        <input id="tagFilter" class="input inline" placeholder="filter by tag">
+        <button id="refreshInbox" class="btn ghost">Refresh</button>
+      </div>
+    </div>
+    <div class="split">
+      <div class="thread-list" id="threadList"></div>
+      <div class="thread-view" id="threadView">
+        <p class="hint">Pick a conversation on the left.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CODES ================= -->
+  <section class="view" id="view-codes">
+    <div class="view-head">
+      <div>
+        <h2>Comment codes</h2>
+        <p class="hint">Someone comments the keyword, they get a DM with that code's link. Add as many as you want.</p>
+      </div>
+      <div class="view-actions">
+        <button id="newTriggerBtn" class="btn primary">New code</button>
+      </div>
+    </div>
+
+    <div class="tester">
+      <label for="testComment">Test a comment before it is live</label>
+      <div class="tester-row">
+        <input id="testComment" class="input" placeholder="Type a comment, e.g. &quot;MAP please&quot;">
+        <button id="testMatchBtn" class="btn ghost">Test match</button>
+      </div>
+      <div id="testResult" class="test-result" hidden></div>
+    </div>
+
+    <div id="triggerList" class="card-list"></div>
+  </section>
+
+  <!-- ================= KNOWLEDGE ================= -->
+  <section class="view" id="view-knowledge">
+    <div class="view-head">
+      <div>
+        <h2>Knowledge base</h2>
+        <p class="hint">DM replies may only state facts that appear here. Empty knowledge base means every DM gets the fallback line.</p>
+      </div>
+      <div class="view-actions">
+        <button id="newResourceBtn" class="btn primary">New entry</button>
+      </div>
+    </div>
+    <div id="resourceList" class="card-list"></div>
+
+    <h3 class="section-head">Guardrails</h3>
+    <p class="hint">Saved here, applied on the next message. No redeploy.</p>
+    <form id="guardrailsForm" class="form-grid">
+      <label>Voice
+        <textarea name="voice" rows="3"></textarea>
+      </label>
+      <label>Fallback line, used when nothing in the knowledge base fits
+        <textarea name="fallback_line" rows="2"></textarea>
+      </label>
+      <label>Escalate on, one per line. Anything matching gets no reply and is flagged for you.
+        <textarea name="escalate_conditions" rows="5"></textarea>
+      </label>
+      <label>Never discuss, one per line
+        <textarea name="banned_topics" rows="3"></textarea>
+      </label>
+      <label>Every reply must, one per line
+        <textarea name="must_include" rows="3"></textarea>
+      </label>
+      <label>Reply length cap, characters
+        <input type="number" name="reply_length_cap" min="40" max="950">
+      </label>
+      <div class="form-actions">
+        <button type="submit" class="btn primary">Save guardrails</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ================= MEDIA ================= -->
+  <section class="view" id="view-media">
+    <div class="view-head">
+      <div>
+        <h2>Media library</h2>
+        <p class="hint">Everything uploaded to R2. Reuse a file on a new post instead of uploading it twice.</p>
+      </div>
+      <div class="view-actions">
+        <label class="btn ghost file-label">Upload<input type="file" id="libraryUpload" accept="image/*,video/*" multiple hidden></label>
+        <button id="refreshMedia" class="btn ghost">Refresh</button>
+      </div>
+    </div>
+    <div id="mediaGrid" class="media-grid"></div>
+  </section>
+
+  <!-- ================= SCHEDULE ================= -->
+  <section class="view" id="view-schedule">
+    <div class="view-head">
+      <div>
+        <h2>Posting schedule</h2>
+        <p class="hint">
+          Recurring slots, in this account's timezone. Once slots exist, adding content to the queue
+          drops it into the next free one instead of you picking a time every single post.
+        </p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Add a slot</h3>
+      <form id="slotForm" class="slot-form">
+        <select name="weekday" class="select">
+          <option value="1">Monday</option><option value="2">Tuesday</option>
+          <option value="3">Wednesday</option><option value="4">Thursday</option>
+          <option value="5">Friday</option><option value="6">Saturday</option>
+          <option value="0">Sunday</option>
+        </select>
+        <input type="time" name="time" class="input" value="09:00" required>
+        <input type="text" name="label" class="input" placeholder="label, optional">
+        <button type="submit" class="btn primary">Add slot</button>
+      </form>
+      <p class="hint" id="slotTzHint"></p>
+    </div>
+
+    <div id="slotList" class="card-list"></div>
+
+    <h3 class="section-head">Next scheduled follow-ups</h3>
+    <p class="hint">Queued by codes that have a follow-up turned on. Cancelled automatically if the person replies first.</p>
+    <div id="followupList" class="card-list"></div>
+  </section>
+
+  <!-- ================= ANALYTICS ================= -->
+  <section class="view" id="view-analytics">
+    <div class="view-head">
+      <div>
+        <h2>Analytics</h2>
+        <p class="hint">Click counts are yours, measured by this Worker. Reach and saves come from Instagram Insights.</p>
+      </div>
+      <div class="view-actions">
+        <select id="analyticsWindow" class="select">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+        <button id="refreshInsightsBtn" class="btn ghost">Pull fresh Insights</button>
+      </div>
+    </div>
+    <div id="statTiles" class="stat-tiles"></div>
+    <h3 class="section-head">Link clicks by code</h3>
+    <div id="clickTable" class="card-list"></div>
+    <h3 class="section-head">Code usage</h3>
+    <div id="codeTable" class="card-list"></div>
+  </section>
+
+  <!-- ================= ACTIVITY ================= -->
+  <section class="view" id="view-activity">
+    <div class="view-head">
+      <h2>Activity</h2>
+      <div class="view-actions">
+        <select id="logFilter" class="select">
+          <option value="">Everything</option>
+          <option value="private_reply_sent">Code replies sent</option>
+          <option value="dm_sent">DMs sent</option>
+          <option value="followup_sent">Follow-ups sent</option>
+          <option value="escalated">Escalations</option>
+          <option value="send_failed">Send failures</option>
+          <option value="send_blocked">Blocked sends</option>
+          <option value="post_published">Posts published</option>
+          <option value="post_failed">Post failures</option>
+          <option value="post_deferred">Posts retrying</option>
+          <option value="webhook_rejected">Rejected webhooks</option>
+        </select>
+        <label class="toggle"><input type="checkbox" id="autoRefresh" checked> auto</label>
+        <button id="refreshLog" class="btn ghost">Refresh</button>
+      </div>
+    </div>
+    <div id="logList" class="log-list"></div>
+  </section>
+
+  <!-- ================= SETTINGS ================= -->
+  <section class="view" id="view-settings">
+    <div class="view-head"><h2>Settings</h2></div>
+
+    <div class="panel">
+      <h3>This account</h3>
+      <div id="accountControls" class="account-controls"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Access token</h3>
+      <p class="hint">
+        Pasted here, encrypted immediately, stored encrypted. It is never written to a file and never
+        shown again. Rotate the token in the Meta console first, then paste the new one.
+      </p>
+      <form id="tokenForm" class="token-form">
+        <input type="password" id="tokenInput" class="input" placeholder="IGAA..." autocomplete="off">
+        <button type="submit" class="btn primary">Save token</button>
+        <button type="button" id="testTokenBtn" class="btn ghost">Test stored token</button>
+      </form>
+      <div id="tokenResult" class="hint"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Health</h3>
+      <div id="systemInfo" class="system-info"></div>
+      <div class="view-actions">
+        <button id="refreshTokensBtn" class="btn ghost">Run token refresh now</button>
+        <button id="backupBtn" class="btn ghost">Back up now</button>
+        <button id="exportBtn" class="btn ghost">Download export</button>
+        <button id="forgetTokenBtn" class="btn ghost danger">Forget API token on this device</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Compliance</h3>
+      <p class="hint">
+        Meta App Review requires both of these to be live and reachable. They are served by this Worker.
+      </p>
+      <div id="complianceLinks" class="system-info"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= COMPOSE POST ================= -->
+<div class="backdrop" id="composeBackdrop">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3 id="composeTitle">New post</h3>
+      <button class="icon-btn" id="closeCompose" aria-label="Close">×</button>
+    </div>
+    <form id="composeForm" class="form-grid">
+      <label>Account
+        <select name="account_id" id="fieldAccount"></select>
+      </label>
+      <label>Type
+        <select name="media_type" id="fieldMediaType">
+          <option value="IMAGE">Image</option>
+          <option value="CAROUSEL">Carousel, 2 to 10 slides</option>
+          <option value="REELS">Reel / video</option>
+          <option value="STORIES">Story</option>
+        </select>
+      </label>
+      <label>Media
+        <input type="file" id="fieldFile" accept="image/*,video/*">
+        <span class="hint" id="mediaStatus"></span>
+      </label>
+      <label id="libraryPickerWrap">Or reuse from library
+        <select id="fieldLibrary"><option value="">—</option></select>
+      </label>
+
+      <div id="carouselWrap" hidden>
+        <p class="hint">Slides publish in this order. Drag is not needed: use the arrows.</p>
+        <div id="carouselList" class="carousel-list"></div>
+        <div class="view-actions">
+          <label class="btn ghost file-label">Add slides<input type="file" id="carouselUpload" accept="image/*,video/*" multiple hidden></label>
+          <select id="carouselFromLibrary" class="select"><option value="">add from library…</option></select>
+        </div>
+      </div>
+
+      <label>Caption
+        <textarea id="fieldCaption" rows="6"></textarea>
+      </label>
+      <label>First comment, optional. Posted publicly right after the post goes live.
+        <textarea id="fieldFirstComment" rows="2" placeholder="hashtags, or &quot;comment MAP for the breakdown&quot;"></textarea>
+      </label>
+      <label>Scheduled time, your local time
+        <input type="datetime-local" id="fieldTime" required>
+      </label>
+      <label class="toggle-row">
+        <input type="checkbox" id="fieldUseQueue"> Use the next free slot instead of this time
+      </label>
+      <p class="error" id="composeError"></p>
+      <div class="form-actions">
+        <button type="button" class="btn ghost danger" id="deletePostBtn" hidden>Delete</button>
+        <button type="button" class="btn ghost" id="approvePostBtn" hidden>Approve</button>
+        <button type="submit" class="btn primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= DAY PANEL ================= -->
+<div class="backdrop" id="dayPanelBackdrop">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3 id="dayPanelTitle">Day</h3>
+      <button class="icon-btn" id="closeDayPanel" aria-label="Close">×</button>
+    </div>
+    <div id="dayPostList" class="card-list"></div>
+    <div class="form-actions">
+      <button class="btn primary" id="addPostForDay">Add post this day</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= TRIGGER EDITOR ================= -->
+<div class="backdrop" id="triggerBackdrop">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3 id="triggerTitle">New code</h3>
+      <button class="icon-btn" id="closeTrigger" aria-label="Close">×</button>
+    </div>
+    <form id="triggerForm" class="form-grid">
+      <label>Keyword, what people comment
+        <input class="input" name="keyword" placeholder="MAP" required>
+      </label>
+      <label>What this code is for, your own note
+        <input class="input" name="label" placeholder="Teardown booking link">
+      </label>
+      <label>Link sent with this code
+        <input class="input" name="link" placeholder="https://apply.leadspanic.com/map">
+        <span class="hint">Sent as a tracked short link so clicks are attributable. UTM tags are added automatically.</span>
+      </label>
+      <label>Reply text. {{link}} is replaced with the link above.
+        <textarea name="reply_template" rows="3" required>Here is the link you asked for. {{link}}</textarea>
+      </label>
+      <label>Public reply in the comment thread, optional
+        <input class="input" name="public_reply_text" placeholder="Sent, check your DMs.">
+        <span class="hint">This is what feeds the post back into the algorithm. Leave blank to send only the DM.</span>
+      </label>
+
+      <fieldset class="fieldset">
+        <legend>Follow-up</legend>
+        <label class="toggle-row"><input type="checkbox" name="followup_active"> Send one follow-up if they go quiet</label>
+        <label>Follow-up message
+          <textarea name="followup_text" rows="2" placeholder="Did you get a chance to look?"></textarea>
+        </label>
+        <label>Hours to wait
+          <input class="input" type="number" name="followup_delay_hours" value="20" min="1" max="23">
+          <span class="hint">Instagram only allows a reply within 24 hours of their last message, so keep this under 24. Cancelled automatically if they reply first.</span>
+        </label>
+      </fieldset>
+
+      <label>Tag everyone who uses this code
+        <input class="input" name="tag" placeholder="map-lead">
+      </label>
+      <label>Matching
+        <select name="match_mode">
+          <option value="word">Whole word, safer. "MAP" will not fire on "mapping".</option>
+          <option value="contains">Anywhere in the comment</option>
+        </select>
+      </label>
+      <label>Priority, lower wins when a comment matches two codes
+        <input class="input" type="number" name="priority" value="100">
+      </label>
+      <label>Only on one specific post, optional Instagram media id
+        <input class="input" name="ig_media_id" placeholder="leave blank for every post">
+      </label>
+      <label class="toggle-row"><input type="checkbox" name="active" checked> Active</label>
+      <p class="error" id="triggerError"></p>
+      <div class="form-actions">
+        <button type="button" class="btn ghost danger" id="deleteTriggerBtn" hidden>Delete</button>
+        <button type="submit" class="btn primary">Save code</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= RESOURCE EDITOR ================= -->
+<div class="backdrop" id="resourceBackdrop">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3 id="resourceTitle">New entry</h3>
+      <button class="icon-btn" id="closeResource" aria-label="Close">×</button>
+    </div>
+    <form id="resourceForm" class="form-grid">
+      <label>Topic
+        <input class="input" name="topic" placeholder="coverage area" required>
+      </label>
+      <label>The true answer. Replies may only use what is written here.
+        <textarea name="content" rows="6" required></textarea>
+      </label>
+      <label>Match terms, one per line. Helps pick this entry for a question.
+        <textarea name="keywords" rows="3" placeholder="charlotte&#10;coverage&#10;service area"></textarea>
+      </label>
+      <label>Links, one per line as Label | https://url
+        <textarea name="links" rows="3"></textarea>
+      </label>
+      <label class="toggle-row"><input type="checkbox" name="active" checked> Active</label>
+      <p class="error" id="resourceError"></p>
+      <div class="form-actions">
+        <button type="button" class="btn ghost danger" id="deleteResourceBtn" hidden>Delete</button>
+        <button type="submit" class="btn primary">Save entry</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

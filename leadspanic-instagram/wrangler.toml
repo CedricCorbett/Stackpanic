@@ -1,0 +1,44 @@
+name = "leadspanic-instagram"
+main = "src/index.js"
+compatibility_date = "2026-07-25"
+
+# The dashboard PWA is served from ./public. run_worker_first makes sure the
+# Worker code handles these path prefixes instead of the static asset server.
+[assets]
+directory = "./public/"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/media/*", "/webhook/*"]
+
+# Created by: wrangler r2 bucket create leadspanic-ig-media
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "leadspanic-ig-media"
+
+# Created by: wrangler d1 create leadspanic-ig
+# Paste the database_id wrangler prints into the line below.
+[[d1_databases]]
+binding = "DB"
+database_name = "leadspanic-ig"
+database_id = "REPLACE_WITH_DATABASE_ID_FROM_WRANGLER_D1_CREATE"
+
+[triggers]
+# Every 15 minutes: publish any post whose scheduled time has passed.
+# Every day at 06:10 UTC: refresh any access token expiring within 10 days.
+crons = ["*/15 * * * *", "10 6 * * *"]
+
+[vars]
+# MUST be the real deployed URL. Meta fetches your media from here, so a wrong
+# value fails publishing with an unhelpful error. Deploy once, copy the URL
+# wrangler prints, paste it here, deploy again. See README step 6.
+PUBLIC_ORIGIN = "https://leadspanic-instagram.YOUR-SUBDOMAIN.workers.dev"
+
+# Instagram Graph API version. Pinned on purpose so a Meta release cannot
+# change behaviour under you. Bump deliberately, not accidentally.
+GRAPH_VERSION = "v25.0"
+
+# Outbound message cap per hour, per account. Meta's ceiling is around 200.
+# This leaves headroom. Sends over the cap are queued and logged, never dropped.
+SEND_CAP_PER_HOUR = "150"
+
+# Model used to draft DM replies.
+CLAUDE_MODEL = "claude-sonnet-4-6"
