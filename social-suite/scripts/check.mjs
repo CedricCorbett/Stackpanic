@@ -47,7 +47,7 @@ const toml = read('wrangler.toml');
 // a check that always fails on a fresh copy is a check you learn to ignore.
 // The text is blunt about the consequence.
 if (toml.includes('REPLACE_WITH_DATABASE_ID')) {
-  warn('wrangler.toml still has the placeholder database_id. `wrangler deploy` WILL FAIL until you run: wrangler d1 create leadspanic-ig, and paste the id it prints into wrangler.toml. See README step 3.');
+  warn('wrangler.toml still has the placeholder database_id. `wrangler deploy` WILL FAIL until you run: wrangler d1 create social-suite, and paste the id it prints into wrangler.toml. See README step 3.');
 } else {
   pass('database_id has been filled in');
 }
@@ -262,7 +262,7 @@ console.log('\nUTM tagging and short codes');
 
 const { withUtm, shortCode } = await import('../src/util.js');
 
-const tagged = withUtm('https://apply.leadspanic.com/map', {
+const tagged = withUtm('https://example.com/map', {
   utm_source: 'instagram', utm_medium: 'comment_code', utm_campaign: 'map',
 });
 assert(tagged.includes('utm_source=instagram'), 'UTM source is applied');
@@ -322,12 +322,12 @@ for (const [r, m, id, label] of allowed) {
 const denied = [
   ['conversations', 'GET', null, 'read the inbox'],
   ['conversations', 'POST', 'x', 'send a DM'],
-  ['accounts', 'PATCH', 'leadspanic', 'pause the account'],
-  ['accounts', 'POST', 'leadspanic', 'replace an access token'],
+  ['accounts', 'PATCH', 'account_one', 'pause the account'],
+  ['accounts', 'POST', 'account_one', 'replace an access token'],
   ['export', 'GET', null, 'export the database'],
   ['run-now', 'POST', null, 'force a publish pass'],
   ['triggers', 'POST', null, 'create a comment code'],
-  ['guardrails', 'PUT', 'leadspanic', 'rewrite the guardrails'],
+  ['guardrails', 'PUT', 'account_one', 'rewrite the guardrails'],
   ['log', 'GET', null, 'read the event log'],
   ['media', 'DELETE', 'x.png', 'delete media'],
   ['posts', 'PATCH', 'x', 'edit an existing post'],

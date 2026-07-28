@@ -13,7 +13,7 @@ saves you writing a PR for something that's a considered no.
 ## Local setup
 
 ```bash
-cd leadspanic-instagram
+cd social-suite
 npm install
 npm run check
 ```

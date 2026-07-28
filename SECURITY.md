@@ -21,7 +21,7 @@ but real reports are genuinely appreciated and will be fixed and credited.
 
 ## Per-project detail
 
-- [`leadspanic-instagram/SECURITY.md`](leadspanic-instagram/SECURITY.md) —
+- [`social-suite/SECURITY.md`](social-suite/SECURITY.md) —
   scope, what's already been reviewed, and what to do if you're running that
   project yourself and suspect a credential leaked.
 

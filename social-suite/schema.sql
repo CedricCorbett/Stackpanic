@@ -1,6 +1,6 @@
--- leadspanic-instagram: unified D1 schema
+-- social-suite: unified D1 schema
 --
--- Merges the ig-scheduler tables with the Leadspanic Autopilot tables, replaces
+-- Merges two earlier prototypes' tables, replaces
 -- the single-keyword design with unlimited comment codes, and adds the punch
 -- list: carousels, a recurring posting schedule, drafts, Instagram Insights,
 -- owned click tracking, timed follow-ups, contact tagging, backups, and health
@@ -17,7 +17,7 @@
 -- accounts
 -- ===========================================================================
 CREATE TABLE IF NOT EXISTS accounts (
-  id                     TEXT PRIMARY KEY,      -- your own short handle, e.g. 'leadspanic'
+  id                     TEXT PRIMARY KEY,      -- your own short handle, e.g. 'account_one'
   label                  TEXT NOT NULL,
   ig_user_id             TEXT NOT NULL UNIQUE,  -- Instagram professional account id from Meta
   -- Long-lived access token, AES-GCM encrypted with the TOKEN_ENC_KEY secret.

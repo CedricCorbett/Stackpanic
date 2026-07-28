@@ -1,4 +1,4 @@
-# Leadspanic Social — setup guide
+# Social Suite — setup guide
 
 **Start here.** This file walks you through everything, click by click, from
 "I have never used a terminal" to a live Instagram automation running on your
@@ -145,7 +145,7 @@ somewhere safe (a password manager, not a plain text file).
 2. Add a payment method (Settings → Billing) — this is pay-as-you-go, not a
    subscription. Typical small-business DM volume costs a few dollars a
    month.
-3. Go to **API Keys**, click **Create Key**, name it (e.g. "leadspanic-social"),
+3. Go to **API Keys**, click **Create Key**, name it (e.g. "social-suite"),
    and copy the key somewhere safe. It's only shown once.
 
 If you skip this, the scheduler and comment codes still work fully — you'll
@@ -210,7 +210,7 @@ git clone <this repository's URL>
 Either way, open a terminal and move into the project folder:
 
 ```bash
-cd leadspanic-instagram
+cd social-suite
 npm install
 ```
 
@@ -224,11 +224,11 @@ text.
 
 ## Part D — Create the cloud storage
 
-Still in that same terminal, inside the `leadspanic-instagram` folder:
+Still in that same terminal, inside the `social-suite` folder:
 
 ```bash
-wrangler r2 bucket create leadspanic-ig-media
-wrangler d1 create leadspanic-ig
+wrangler r2 bucket create social-suite-media
+wrangler d1 create social-suite
 ```
 
 The second command prints a block of text ending in something like:
@@ -236,7 +236,7 @@ The second command prints a block of text ending in something like:
 ```toml
 [[d1_databases]]
 binding = "DB"
-database_name = "leadspanic-ig"
+database_name = "social-suite"
 database_id = "a1b2c3d4-....."
 ```
 
@@ -339,7 +339,7 @@ uploads your Worker. When it finishes, it prints your live URL, something
 like:
 
 ```
-https://leadspanic-instagram.your-name.workers.dev
+https://social-suite.your-name.workers.dev
 ```
 
 **Copy that exact URL.**
@@ -349,7 +349,7 @@ https://leadspanic-instagram.your-name.workers.dev
 Open `wrangler.toml` again and find this line:
 
 ```toml
-PUBLIC_ORIGIN = "https://leadspanic-instagram.YOUR-SUBDOMAIN.workers.dev"
+PUBLIC_ORIGIN = "https://social-suite.YOUR-SUBDOMAIN.workers.dev"
 ```
 
 Replace it with the **exact URL** Wrangler just printed for you, then save
@@ -395,7 +395,7 @@ they can run for real.
    and your account's handle from Part D1) and try saving the token again:
 
    ```bash
-   wrangler d1 execute leadspanic-ig --remote --command="UPDATE accounts SET ig_user_id='PASTE_THE_ID_FROM_THE_ERROR' WHERE id='account_one'"
+   wrangler d1 execute social-suite --remote --command="UPDATE accounts SET ig_user_id='PASTE_THE_ID_FROM_THE_ERROR' WHERE id='account_one'"
    ```
 
 4. Click **Activate account**. Leave **automatic replies** off for now.
@@ -432,7 +432,7 @@ exactly those — nothing else. Meta's own reviewers commonly take **2 to 20
 days** for a first pass, and a rejection adds another 3–5 days, so start this
 early and expect to wait.
 
-The technical README (in `leadspanic-instagram/README.md`, sections 5 and 6)
+The technical README (in `social-suite/README.md`, sections 5 and 6)
 has the exact screencast script Meta expects, a permission-by-permission
 checklist, and what to do if you're rejected. Read that before you submit —
 it is the single biggest thing that determines whether your first submission
@@ -497,7 +497,7 @@ policy URL actually load, does the app's behavior match exactly what you
 narrated.
 
 **I'm stuck on something not listed here** — the technical README
-(`leadspanic-instagram/README.md`) covers the system in much more depth,
+(`social-suite/README.md`) covers the system in much more depth,
 including a full list of every event you might see in the Activity tab and
 what it means (section 12).
 

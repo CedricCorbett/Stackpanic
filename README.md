@@ -11,7 +11,7 @@ setup instructions, its own license where it differs from the root one.
 
 | Folder | What it is |
 |---|---|
-| [`leadspanic-instagram/`](leadspanic-instagram/) | **Leadspanic Social.** An Instagram scheduler, comment-code DM automation, and AI-drafted DM replies, all running on your own Cloudflare account. No monthly ManyChat fee, no third party holding your tokens. Start at [`leadspanic-instagram/SETUP.md`](leadspanic-instagram/SETUP.md). |
+| [`social-suite/`](social-suite/) | **Social Suite.** An Instagram scheduler, comment-code DM automation, and AI-drafted DM replies, all running on your own Cloudflare account. No monthly ManyChat fee, no third party holding your tokens. Start at [`social-suite/SETUP.md`](social-suite/SETUP.md). |
 | [`free-stack/`](free-stack/) | **The Free Stack.** A 26-guide build-along library: free-forever replacements for the paid tools a small business normally rents — forms, checkout, invoicing, booking, a CRM, pixel/CAPI tracking, and more. Start at [`free-stack/README.md`](free-stack/README.md). |
 
 More gets added here over time, each in its own top-level folder.

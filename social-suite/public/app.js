@@ -1,4 +1,4 @@
-/* Leadspanic Social — dashboard client.
+/* Social Suite — dashboard client.
  *
  * Vanilla JS, no build step, on purpose. You should be able to open this file,
  * read it top to bottom, and change something without a toolchain.
@@ -1376,7 +1376,7 @@ $('exportBtn').onclick = async () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `leadspanic-export-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `social-suite-export-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast('Export downloaded');

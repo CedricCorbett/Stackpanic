@@ -8,7 +8,7 @@ code style for that project).
 ## General rules, repo-wide
 
 - Keep changes inside the project folder they belong to. A fix to
-  `leadspanic-instagram/` shouldn't touch `free-stack/` in the same PR, and
+  `social-suite/` shouldn't touch `free-stack/` in the same PR, and
   vice versa — they're independent projects sharing a repo, not one codebase.
 - For anything bigger than a typo fix, open an issue first describing what you
   want to change and why.
@@ -19,7 +19,7 @@ code style for that project).
 
 ## Where to actually look
 
-- [`leadspanic-instagram/CONTRIBUTING.md`](leadspanic-instagram/CONTRIBUTING.md) —
+- [`social-suite/CONTRIBUTING.md`](social-suite/CONTRIBUTING.md) —
   local setup, the test suite, code style, security-sensitive areas.
 - [`free-stack/README.md`](free-stack/README.md) and
   [`free-stack/TEMPLATE.md`](free-stack/TEMPLATE.md) — the shape every guide

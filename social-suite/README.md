@@ -1,4 +1,4 @@
-# Leadspanic Social
+# Social Suite
 
 > **New here?** This file is the technical reference — every endpoint, every
 > guardrail, every internal decision, explained. For a step-by-step walkthrough
@@ -17,8 +17,8 @@ account. No monthly ManyChat fee, no third party holding your tokens.
 
 **Scheduler.** A calendar. Attach media, write a caption, pick a time. A cron
 checks every 15 minutes and publishes what is due. Handles single images, video
-and Reels, Stories, and **carousels of 2 to 10 slides**, which is what your
-`leadspanic-grid` teardowns actually are.
+and Reels, Stories, and **carousels of 2 to 10 slides**, which is the format
+most multi-slide teardown/breakdown content actually is.
 
 **Posting schedule.** Define recurring slots once ("Tue 09:00, Thu 09:00"), then
 drop content into the queue and it lands in the next free slot. Times are
@@ -161,7 +161,7 @@ In order. Step 6 has a trap in it that is called out.
 - An Anthropic API key from console.anthropic.com, only needed for AI DM replies
 
 ```bash
-cd leadspanic-instagram
+cd social-suite
 npm install
 ```
 
@@ -178,8 +178,8 @@ encrypted immediately.
 ### Step 2 — create the storage
 
 ```bash
-wrangler r2 bucket create leadspanic-ig-media
-wrangler d1 create leadspanic-ig
+wrangler r2 bucket create social-suite-media
+wrangler d1 create social-suite
 ```
 
 Copy the `database_id` the second command prints into `wrangler.toml`, replacing
@@ -336,7 +336,7 @@ guaranteed rejection.
 
 One continuous recording, narrated, no jump cuts.
 
-> "This app is Leadspanic Social. It automates three things on the connected
+> "This app is Social Suite. It automates three things on the connected
 > Instagram account: replying to specific comment keywords with a private
 > message, answering direct messages using a knowledge base the account owner
 > controls, and reading post performance metrics for the owner's own posts."
@@ -455,30 +455,31 @@ the request body. So the safety chain is: skill creates a draft → it appears o
 your calendar with an amber bar → nothing reaches Instagram until you tap
 Approve.
 
-### The publish skill
+### A shared publish script
 
-`leadspanic-publish` owns the API and the script. The three content skills hand
-off to it rather than each carrying their own copy, so when this API changes
-there is one place to update, not three.
+If more than one of your own content-generation tools needs to push into this
+queue, put the API-calling logic in one script that all of them call, rather
+than each carrying its own copy. One place to update when this API changes,
+not several.
 
 ```bash
-# a whole leadspanic-grid output directory
+# a whole content-batch output directory
 python3 scripts/publish.py --url <worker_url> --key <INGEST_TOKEN> \
-    --account leadspanic --batch ./out
+    --account account_one --batch ./out
 
 # see what would happen, send nothing
 ... --dry-run
 ```
 
-Batch mode groups `slide*.png` into one carousel in **numeric** order (so
-`slide10` lands after `slide2`, not before it), pairs captions from
+A reasonable batch mode groups `slide*.png` into one carousel in **numeric**
+order (so `slide10` lands after `slide2`, not before it), pairs captions from
 `captions.txt`, skips `thumbnail.png`, and publishes the rest as singles. Each
 post goes into the next free slot on your posting schedule unless you pass
 `--at`.
 
-Credentials are arguments, never files. Same convention `fetch_queue.py`
-already uses for the content-queue API: Claude asks you for the URL and key at
-run time.
+Credentials are arguments, never files, for the same reason as everywhere else
+in this project: whatever calls this script asks you for the URL and key at
+run time, instead of one being saved to disk somewhere.
 
 ### Raw API, if you want it without the skill
 
@@ -491,7 +492,7 @@ curl -X POST https://<your-worker>/api/media \
 # then create the post, into the next free slot
 curl -X POST https://<your-worker>/api/queue \
   -H "Authorization: Bearer <INGEST_TOKEN>" -H "Content-Type: application/json" \
-  -d '{"account_id":"leadspanic","media_type":"CAROUSEL",
+  -d '{"account_id":"account_one","media_type":"CAROUSEL",
        "media_keys":["s1.png","s2.png","s3.png","s4.png","s5.png","s6.png"],
        "caption":"...","first_comment":"comment MAP for the breakdown","source":"claude"}'
 ```
@@ -660,7 +661,7 @@ Decisions, not oversights.
 ## 14. Files
 
 ```
-leadspanic-instagram/
+social-suite/
   wrangler.toml       bindings, crons, PUBLIC_ORIGIN, pinned Graph version
   schema.sql          every table, no secrets, safe to re-run
   scripts/check.mjs   pre-deploy checks and logic assertions

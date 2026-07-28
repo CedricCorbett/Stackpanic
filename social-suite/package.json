@@ -1,5 +1,5 @@
 {
-  "name": "leadspanic-instagram",
+  "name": "social-suite",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "db:migrate": "wrangler d1 execute leadspanic-ig --remote --file=./schema.sql",
-    "db:migrate:local": "wrangler d1 execute leadspanic-ig --local --file=./schema.sql",
+    "db:migrate": "wrangler d1 execute social-suite --remote --file=./schema.sql",
+    "db:migrate:local": "wrangler d1 execute social-suite --local --file=./schema.sql",
     "check": "node scripts/check.mjs",
     "tail": "wrangler tail"
   },

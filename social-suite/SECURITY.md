@@ -32,7 +32,7 @@ before anyone else was asked to trust this with real Instagram credentials.
 
 ## Scope
 
-In scope: anything in `leadspanic-instagram/` — the Worker, the dashboard, the
+In scope: anything in `social-suite/` — the Worker, the dashboard, the
 schema, the pre-deploy check script.
 
 Out of scope: vulnerabilities in Cloudflare Workers, D1, R2, or the Instagram

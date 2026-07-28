@@ -1,4 +1,4 @@
-name = "leadspanic-instagram"
+name = "social-suite"
 main = "src/index.js"
 compatibility_date = "2026-07-25"
 
@@ -9,16 +9,16 @@ directory = "./public/"
 binding = "ASSETS"
 run_worker_first = ["/api/*", "/media/*", "/webhook/*"]
 
-# Created by: wrangler r2 bucket create leadspanic-ig-media
+# Created by: wrangler r2 bucket create social-suite-media
 [[r2_buckets]]
 binding = "MEDIA"
-bucket_name = "leadspanic-ig-media"
+bucket_name = "social-suite-media"
 
-# Created by: wrangler d1 create leadspanic-ig
+# Created by: wrangler d1 create social-suite
 # Paste the database_id wrangler prints into the line below.
 [[d1_databases]]
 binding = "DB"
-database_name = "leadspanic-ig"
+database_name = "social-suite"
 database_id = "REPLACE_WITH_DATABASE_ID_FROM_WRANGLER_D1_CREATE"
 
 [triggers]
@@ -30,7 +30,7 @@ crons = ["*/15 * * * *", "10 6 * * *"]
 # MUST be the real deployed URL. Meta fetches your media from here, so a wrong
 # value fails publishing with an unhelpful error. Deploy once, copy the URL
 # wrangler prints, paste it here, deploy again. See README step 6.
-PUBLIC_ORIGIN = "https://leadspanic-instagram.YOUR-SUBDOMAIN.workers.dev"
+PUBLIC_ORIGIN = "https://social-suite.YOUR-SUBDOMAIN.workers.dev"
 
 # Instagram Graph API version. Pinned on purpose so a Meta release cannot
 # change behaviour under you. Bump deliberately, not accidentally.

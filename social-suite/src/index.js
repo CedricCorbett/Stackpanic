@@ -1,4 +1,4 @@
-// leadspanic-instagram
+// social-suite
 //
 // One Cloudflare Worker, one database, three groups of routes.
 //
@@ -549,7 +549,7 @@ async function handleApi(path, method, request, env, ctx, url, level = 'admin') 
   // ---------------- guardrails ----------------
   if (resource === 'guardrails') {
     const accountId = id || accountParam;
-    if (!accountId) throw badRequest('Specify an account, e.g. /api/guardrails/leadspanic');
+    if (!accountId) throw badRequest('Specify an account, e.g. /api/guardrails/account_one');
     if (method === 'GET') return json(await db.getGuardrails(env, accountId));
     if (method === 'PUT' || method === 'PATCH') {
       await db.getGuardrails(env, accountId);
@@ -621,7 +621,7 @@ async function handleApi(path, method, request, env, ctx, url, level = 'admin') 
     return new Response(JSON.stringify(snapshot, null, 2), {
       headers: {
         'content-type': 'application/json',
-        'content-disposition': `attachment; filename="leadspanic-export-${new Date().toISOString().slice(0, 10)}.json"`,
+        'content-disposition': `attachment; filename="social-suite-export-${new Date().toISOString().slice(0, 10)}.json"`,
       },
     });
   }

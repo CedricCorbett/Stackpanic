@@ -1,6 +1,6 @@
 {
-  "name": "Leadspanic Social",
-  "short_name": "LP Social",
+  "name": "Social Suite",
+  "short_name": "Social",
   "description": "Schedule Instagram posts, answer DMs, and run comment codes for the accounts you manage.",
   "start_url": "/",
   "display": "standalone",
