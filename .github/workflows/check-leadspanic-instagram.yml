@@ -1,9 +1,11 @@
-name: check
+name: check-leadspanic-instagram
 
 on:
   push:
     branches: [main]
+    paths: ['leadspanic-instagram/**']
   pull_request:
+    paths: ['leadspanic-instagram/**']
 
 jobs:
   check:

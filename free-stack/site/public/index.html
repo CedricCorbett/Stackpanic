@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Free Stack: 26 tools, $0 forever | Leadspanic</title>
+  <meta name="description" content="26 pieces of business software you deploy yourself and own forever. No subscription, no trial, no seat limit. One guide releases every week.">
+  <link rel="icon" href="/favicon.png"> <!-- TODO: swap in the Leadspanic mark -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <a href="/" class="wordmark">THE FREE STACK <span>·</span> LEADSPANIC</a>
+      <span class="tagline">Library v1</span>
+    </div>
+  </header>
+
+  <div class="mosaic" aria-hidden="true">
+    <i class="r" style="top:96px;  left:14%;"></i>
+    <i class="l" style="top:192px; left:62%;"></i>
+    <i class="r" style="top:288px; left:81%;"></i>
+    <i class="r" style="top:64px;  left:47%;"></i>
+  </div>
+
+  <main class="wrap">
+
+    <section class="hero">
+      <div class="eyebrow">An open build from Leadspanic</div>
+      <h1>26 tools. Built once. Paid for never again.</h1>
+      <p class="sub">Every guide replaces one subscription with something you deploy yourself and keep forever. No trial. No seat limit. No card on file.</p>
+
+      <form id="subForm" class="capture" novalidate>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="email" name="email" placeholder="you@yourbusiness.com" required>
+        <button type="submit" class="btn-lime">Get notified when a guide drops</button>
+      </form>
+      <p class="capture-msg" id="subMsg"></p>
+
+      <p class="dm-hint">Already following? Comment <b>STACK</b> on any post and this page gets sent to you.</p>
+    </section>
+
+    <div class="stats">
+      <div class="stat"><b>26</b><span>guides in the library</span></div>
+      <div class="stat"><b>$1,370</b><span>rented every month, on average*</span></div>
+      <div class="stat"><b>$0</b><span>what you pay once you own it</span></div>
+    </div>
+
+    <section class="manifest">
+      <h2>The manifest</h2>
+      <p class="lede">One guide releases every week, in the order below. Live ones link straight to the build. Everything else is dated so you know exactly when it lands.</p>
+
+      <div class="ledger" id="ledger">
+        <!-- rendered from manifest.json -->
+      </div>
+
+      <div class="total" id="ledgerTotal"></div>
+
+      <p class="footnote">*Sum of guides with a direct paid equivalent, using each tool's lowest published tier. Excludes guides with no direct subscription equivalent and one that replaces a copywriter instead of software. The math is public: <a href="/manifest.json" style="text-decoration:underline">manifest.json</a>, recompute it yourself.</p>
+    </section>
+
+    <section class="test">
+      <h2>Why this can say "for life" and mean it</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="num">01</div>
+          <p><b style="color:var(--paper)">Zero marginal cost.</b> Running it for 1 person or 1,000 costs nothing, up to Cloudflare's generous free-tier ceilings (guide 00 has the exact numbers). Past those, you've earned a real problem and a bill of a few dollars a month.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <p><b style="color:var(--paper)">Zero support burden.</b> You deploy it on your own account. Nobody is holding your uptime for you.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <p><b style="color:var(--paper)">Zero metered billing.</b> No per-message, per-minute, or per-seat charge hiding underneath.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="repo">
+      <p>Every guide, every line of code, and the source for this page itself are public. Fork it, fix it, ship your own version.</p>
+      <a class="btn-outline" href="https://github.com/leadspanic/free-stack" target="_blank" rel="noopener">github.com/leadspanic/free-stack</a>
+    </section>
+
+  </main>
+
+  <footer class="wrap">
+    <span>&copy; 2026 Leadspanic. Free means free, no catch, ever.</span>
+    <span><a href="https://instagram.com/leadspanic" target="_blank" rel="noopener">@leadspanic</a></span>
+  </footer>
+
+  <script>
+    // TODO: once the real repo exists, confirm this matches its default branch.
+    const REPO_BASE = "https://github.com/leadspanic/free-stack/blob/main/";
+
+    const money = (n) => "$" + n.toLocaleString("en-US");
+
+    async function loadManifest() {
+      const res = await fetch("/manifest.json");
+      const items = await res.json();
+
+      const ledger = document.getElementById("ledger");
+      const totalEl = document.getElementById("ledgerTotal");
+      let total = 0;
+
+      items.forEach((item) => {
+        const isLive = item.status === "live";
+        if (typeof item.cost === "number") total += item.cost;
+
+        const row = document.createElement(isLive ? "a" : "div");
+        row.className = "row" + (isLive ? "" : " locked");
+        if (isLive) {
+          row.href = REPO_BASE + item.path;
+          row.target = "_blank";
+          row.rel = "noopener";
+        }
+
+        const tag = isLive ? "Live" : "Week " + item.week;
+        const cost = typeof item.cost === "number" ? money(item.cost) + "/mo" : "—";
+
+        row.innerHTML = `
+          <span class="n">${item.n}</span>
+          <span class="t">
+            <span class="title">${item.title}</span>
+            <span class="replaces">replaces ${item.replaces}</span>
+          </span>
+          <span class="tag">${tag}</span>
+          <span class="cost">${cost}</span>
+        `;
+        ledger.appendChild(row);
+      });
+
+      totalEl.innerHTML = `
+        <span></span>
+        <span class="t">Running total, all 26 built</span>
+        <span></span>
+        <span class="cost">${money(total)}/mo</span>
+      `;
+    }
+
+    loadManifest().catch(() => {
+      document.getElementById("ledger").textContent =
+        "Could not load the manifest. Refresh, or check /manifest.json directly.";
+    });
+
+    // Email capture
+    const form = document.getElementById("subForm");
+    const msg  = document.getElementById("subMsg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const button = form.querySelector("button");
+      button.disabled = true;
+      msg.textContent = "Sending...";
+
+      const data = Object.fromEntries(new FormData(form));
+      data.source = new URLSearchParams(location.search).get("v") || "direct";
+
+      try {
+        const res = await fetch("/api/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const out = await res.json();
+        if (out.ok) {
+          form.reset();
+          msg.textContent = "You're in. Next guide lands in your inbox.";
+        } else {
+          msg.textContent = out.error || "Something went wrong.";
+          button.disabled = false;
+        }
+      } catch {
+        msg.textContent = "Network problem. Try again.";
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

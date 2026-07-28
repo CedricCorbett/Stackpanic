@@ -1,0 +1,337 @@
+/* ---------------------------------------------------------------
+   Leadspanic brand tokens.
+   Ink/off-white/red/lime match the leadspanic.com lander exactly.
+   Lime is reserved for the one primary call to action. Do not use
+   it anywhere else on this page, that rule is what makes it work.
+   --------------------------------------------------------------- */
+:root {
+  --ink:      #0E0F12;
+  --ink-2:    #16181D;
+  --paper:    #F0F0EC;
+  --red:      #FF3E30;
+  --lime:     #C6F542;
+  --line:     #2A2D33;
+  --muted:    #8A8F98;
+
+  --display: "Space Grotesk", -apple-system, sans-serif;
+  --mono:    "JetBrains Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+a { color: inherit; }
+
+::selection { background: var(--red); color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ---------------------------------------------------------------
+   Header
+   --------------------------------------------------------------- */
+header {
+  border-bottom: 1px solid var(--line);
+  padding: 22px 0;
+}
+header .wrap { display: flex; justify-content: space-between; align-items: baseline; }
+
+.wordmark {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+.wordmark span { color: var(--red); }
+
+.tagline {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ---------------------------------------------------------------
+   The mosaic. A census-tract grid, quiet, with a few lit cells.
+   This is the one signature element on the page. Everything
+   else stays disciplined so this carries the brand.
+   --------------------------------------------------------------- */
+.mosaic {
+  position: absolute;
+  inset: 0;
+  height: 640px;
+  background-image:
+    linear-gradient(rgba(240,240,236,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,240,236,0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+  z-index: 0;
+  pointer-events: none;
+}
+.mosaic i {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  opacity: 0.5;
+}
+.mosaic i.r { background: var(--red); }
+.mosaic i.l { background: var(--lime); }
+
+/* ---------------------------------------------------------------
+   Hero
+   --------------------------------------------------------------- */
+.hero { padding: 88px 0 56px; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: clamp(34px, 5.5vw, 54px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  max-width: 720px;
+}
+
+.sub {
+  margin-top: 20px;
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 560px;
+}
+
+/* Form */
+.capture {
+  margin-top: 36px;
+  display: flex;
+  gap: 10px;
+  max-width: 460px;
+  flex-wrap: wrap;
+}
+.capture input[type="email"] {
+  flex: 1 1 240px;
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 14px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: var(--display);
+}
+.capture input[type="email"]:focus {
+  outline: 2px solid var(--lime);
+  border-color: var(--lime);
+}
+.capture input[type="text"] { display: none; } /* honeypot */
+
+.btn-lime {
+  background: var(--lime);
+  color: var(--ink);
+  border: 0;
+  padding: 14px 22px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: var(--display);
+}
+.btn-lime:hover { filter: brightness(1.08); }
+.btn-lime:disabled { opacity: 0.6; cursor: default; }
+
+.capture-msg {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  min-height: 18px;
+}
+
+.dm-hint {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.dm-hint b { color: var(--paper); font-family: var(--mono); }
+
+/* ---------------------------------------------------------------
+   Stat bar
+   --------------------------------------------------------------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-top: 64px;
+}
+.stat { padding: 26px 20px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; }
+.stat b {
+  display: block;
+  font-family: var(--mono);
+  font-size: clamp(22px, 4vw, 32px);
+  color: var(--paper);
+}
+.stat span {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------
+   The Manifest — the ledger
+   --------------------------------------------------------------- */
+.manifest { padding: 64px 0 32px; }
+.manifest h2 { font-size: 26px; margin-bottom: 6px; }
+.manifest .lede { color: var(--muted); font-size: 15px; max-width: 560px; margin-bottom: 32px; }
+
+.ledger { border-top: 1px solid var(--line); }
+
+.row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+}
+.row.locked { opacity: 0.45; }
+.row:not(.locked):hover { background: var(--ink-2); }
+
+.row .n {
+  font-family: var(--mono);
+  color: var(--red);
+  font-size: 14px;
+}
+.row .t { min-width: 0; }
+.row .t .title { font-size: 15px; font-weight: 600; }
+.row .t .replaces { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+.row .tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.row.locked .tag { border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; }
+.row:not(.locked) .tag { color: var(--lime); }
+
+.row .cost {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--muted);
+  white-space: nowrap;
+  text-align: right;
+  min-width: 68px;
+}
+
+.total {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  gap: 16px;
+  padding: 20px 0 4px;
+}
+.total .t { font-weight: 700; }
+.total .cost {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--lime);
+  font-size: 18px;
+}
+
+.footnote {
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 560px;
+}
+
+/* ---------------------------------------------------------------
+   The test
+   --------------------------------------------------------------- */
+.test { padding: 56px 0; border-top: 1px solid var(--line); }
+.test h2 { font-size: 22px; margin-bottom: 24px; }
+.test .grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.test .card { border: 1px solid var(--line); border-radius: 8px; padding: 20px; }
+.test .card .num { font-family: var(--mono); color: var(--red); font-size: 13px; margin-bottom: 8px; }
+.test .card p { font-size: 14px; color: var(--muted); }
+
+/* ---------------------------------------------------------------
+   Repo callout
+   --------------------------------------------------------------- */
+.repo {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.repo p { color: var(--muted); font-size: 14px; max-width: 420px; }
+.repo .btn-outline {
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+.repo .btn-outline:hover { border-color: var(--paper); }
+
+/* ---------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------- */
+footer {
+  border-top: 1px solid var(--line);
+  padding: 32px 0 60px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 13px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+footer a { text-decoration: none; }
+footer a:hover { color: var(--paper); }
+
+@media (max-width: 640px) {
+  .hero { padding: 56px 0 40px; }
+  .stats { grid-template-columns: 1fr; }
+  .stat { border-left: 0; border-top: 1px solid var(--line); }
+  .stat:first-child { border-top: 0; }
+  .row { grid-template-columns: 28px 1fr; grid-template-rows: auto auto; }
+  .row .tag, .row .cost { grid-column: 2; justify-self: start; }
+  .total { grid-template-columns: 28px 1fr; }
+  .total .cost { grid-column: 2; justify-self: start; }
+}

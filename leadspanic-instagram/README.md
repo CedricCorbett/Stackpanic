@@ -3,9 +3,9 @@
 > **New here?** This file is the technical reference — every endpoint, every
 > guardrail, every internal decision, explained. For a step-by-step walkthrough
 > written for a non-technical business owner (create the accounts, run the
-> commands, connect Meta, go live), start at the
-> **[repository's top-level README](../README.md)** instead. Come back here
-> once it's running, or whenever you want to know exactly how something works.
+> commands, connect Meta, go live), start at **[SETUP.md](SETUP.md)** instead.
+> Come back here once it's running, or whenever you want to know exactly how
+> something works.
 
 One app for both Instagram accounts: schedule and publish posts, answer DMs, and
 run as many comment codes as you want. Runs entirely on your own Cloudflare
