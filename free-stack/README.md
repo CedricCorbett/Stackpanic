@@ -4,7 +4,8 @@ A build-along library. Every guide gives away one piece of business software tha
 
 No trials. No seats. No "free up to 3 users."
 
-Published by Leadspanic. Live at `stack.leadspanic.com`. Source in this repo.
+Published by Leadspanic. Every guide lives in this repo, in [`guides/`](guides/).
+Read them here; there is nothing to sign up for.
 
 ---
 
@@ -129,6 +130,6 @@ free-stack/
 ├── TEMPLATE.md          the shape every guide follows
 ├── LICENSE
 ├── guides/              00 through 25, one file per guide
-├── site/                stack.leadspanic.com, the Worker, D1, and the manifest-driven page
+├── site/                optional: a Worker + D1 that serves this library as a page
 └── marketing/           launch post copy and the STACK keyword spec
 ```

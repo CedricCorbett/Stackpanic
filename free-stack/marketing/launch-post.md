@@ -55,7 +55,7 @@ This runs alongside MAP, not instead of it. Two keywords, two jobs, same account
 ## DM reply copy
 
 ```
-Here's the full library: stack.leadspanic.com
+Here's the full library: github.com/CedricCorbett/Stackpanic
 
 26 guides. One drops every week. Everything released
 so far is already live and linked on the page.
